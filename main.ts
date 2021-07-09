@@ -1,15 +1,30 @@
+namespace SpriteKind {
+    export const Temps = SpriteKind.create()
+}
+sprites.onOverlap(SpriteKind.Food, SpriteKind.Player, function (sprite, otherSprite) {
+    sprite.destroy()
+    info.changeLifeBy(1)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     otherSprite.destroy()
     info.changeScoreBy(1)
 })
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
-	
+    projectile2.destroy()
+    info.changeLifeBy(-1)
 })
 info.onLifeZero(function () {
     game.over(false)
 })
-let projectile2: Sprite = null
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Temps, function (sprite, otherSprite) {
+    otherSprite.destroy()
+    info.stopCountdown()
+    info.startCountdown(10)
+})
+let projectile3: Sprite = null
 let projectile: Sprite = null
+let projectile4: Sprite = null
+let projectile2: Sprite = null
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999111111111119999999999999999999999999999999999999991111999999999999999999999999999999999999999999111111111111
@@ -318,6 +333,29 @@ true
 info.setLife(3)
 info.startCountdown(10)
 forever(function () {
+    projectile4 = sprites.createProjectileFromSide(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . 6 6 6 6 . . . . . . 
+        . . . . 6 6 6 5 5 6 6 6 . . . . 
+        . . . 7 7 7 7 6 6 6 6 6 6 . . . 
+        . . 6 7 7 7 7 8 8 8 1 1 6 6 . . 
+        . . 7 7 7 7 7 8 8 8 1 1 5 6 . . 
+        . 6 7 7 7 7 8 8 8 8 8 5 5 6 6 . 
+        . 6 7 7 7 8 8 8 6 6 6 6 5 6 6 . 
+        . 6 6 7 7 8 8 6 6 6 6 6 6 6 6 . 
+        . 6 8 7 7 8 8 6 6 6 6 6 6 6 6 . 
+        . . 6 8 7 7 8 6 6 6 6 6 8 6 . . 
+        . . 6 8 8 7 8 8 6 6 6 8 6 6 . . 
+        . . . 6 8 8 8 8 8 8 8 8 6 . . . 
+        . . . . 6 6 8 8 8 8 6 6 . . . . 
+        . . . . . . 6 6 6 6 . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, -90, 0)
+    projectile4.y = randint(30, 130)
+    projectile4.setKind(SpriteKind.Temps)
+    pause(5000)
+})
+forever(function () {
     projectile = sprites.createProjectileFromSide(img`
         . . . . . . . . . . . . . . . . 
         . . . . . f f f f f f . . . . . 
@@ -412,6 +450,86 @@ forever(function () {
     true
     )
     pause(1000)
+})
+forever(function () {
+    projectile3 = sprites.createProjectileFromSide(img`
+        . . . . . . . . . . . . . . . . 
+        . . f f f f f f . f f f f f f . 
+        . f f 3 3 3 3 f f f 3 3 3 3 f f 
+        . f 3 3 3 3 3 3 f 3 3 3 3 3 3 f 
+        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+        . f 3 3 3 3 3 b b b 1 1 1 3 3 f 
+        . f 3 3 3 3 b b b b b 3 3 3 3 f 
+        . f f 3 3 b b b b b b b 3 3 f f 
+        . . f f 3 b b b b b b b 3 f f . 
+        . . . f f b b b b b b b f f . . 
+        . . . . f f b b b b b f f . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, -90, 0)
+    projectile3.y = randint(30, 120)
+    animation.runImageAnimation(
+    projectile3,
+    [img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . f f f . f f f . . . . 
+        . . . . f 3 3 3 f 3 3 3 f . . . 
+        . . . . f 3 3 3 3 3 1 3 f . . . 
+        . . . . f 3 3 3 3 3 3 3 f . . . 
+        . . . . . f 3 b b b 3 f . . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . f f f f f f . f f f f f f . 
+        . f f 3 3 3 3 f f f 3 3 3 3 f f 
+        . f 3 3 3 3 3 3 f 3 3 3 3 3 3 f 
+        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+        . f 3 3 3 3 3 b b b 1 1 1 3 3 f 
+        . f 3 3 3 3 b b b b b 3 3 3 3 f 
+        . f f 3 3 b b b b b b b 3 3 f f 
+        . . f f 3 b b b b b b b 3 f f . 
+        . . . f f b b b b b b b f f . . 
+        . . . . f f b b b b b f f . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . f f f f f . f f f f f . . 
+        . . f f 3 3 3 f f f 3 3 3 f f . 
+        . . f 3 3 3 3 3 f 3 3 3 3 3 f . 
+        . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+        . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+        . . f 3 3 3 3 3 3 3 3 3 3 3 f . 
+        . . f f 3 3 3 b b b 3 3 3 f f . 
+        . . . f f 3 b b b b b 3 f f . . 
+        . . . . f f b b b b b f f . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `],
+    500,
+    true
+    )
+    projectile3.setKind(SpriteKind.Food)
+    pause(20100)
 })
 forever(function () {
     projectile2 = sprites.createProjectileFromSide(img`
